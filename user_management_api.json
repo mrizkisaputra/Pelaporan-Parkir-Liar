@@ -1,0 +1,56 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "User Management API",
+    "description": "Ini adalah API untuk informasi user",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5050/api/v1/"
+    }
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "summary": "",
+        "description": "",
+        "requestBody": {
+          "required": true,
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+              },
+              "example": {
+                "username": "example",
+                "password": "rahasia",
+                "phoneNumber": "0812345678910"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Response sukses",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "Created",
+                  "message": "Registrasi berhasil"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+
+      }
+    }
+  }
+
+
+}
