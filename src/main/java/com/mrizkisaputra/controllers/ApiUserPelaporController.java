@@ -16,8 +16,6 @@ public class ApiUserPelaporController {
 
     @GetMapping("/users/profile")
     public ResponseEntity<Object> getUserProfile(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
-        log.info("Object Userr : {}", user);
         return new ResponseEntity<>("Pelapor access level", HttpStatus.OK);
     }
 }

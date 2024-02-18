@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class RegisterUserDTO {
+public class RegisterUserRequestDTO {
     @NotNull(message = "{register-user-dto.username.notnull}")
     @NotBlank(message = "{register-user-dto.username.notblank}")
     private String username;

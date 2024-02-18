@@ -30,14 +30,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                     .build();
             validationError.add(build);
         }
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, err.getMessage(), err);
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST.getReasonPhrase(), err.getMessage(), err);
         apiError.setSubErrors(validationError);
         return buildResponseEntity(apiError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<ApiError> responseStatusException(ResponseStatusException err) {
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, err.getReason(), err);
+        ApiError apiError = new ApiError(err.getStatusCode().toString(), err.getReason(), err);
         return buildResponseEntity(apiError, HttpStatus.BAD_REQUEST);
     }
 

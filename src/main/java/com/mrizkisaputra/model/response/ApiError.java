@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 public class ApiError {
-    private HttpStatus status;
+    private String status;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-YYYY hh:mm:ss")
     private LocalDateTime timestamp;
@@ -25,17 +25,17 @@ public class ApiError {
         this.timestamp = LocalDateTime.now(ZoneId.systemDefault());
     }
 
-    public ApiError(HttpStatus status) {
+    public ApiError(String status) {
         this();
         this.status = status;
     }
 
-    public ApiError(HttpStatus status, String message) {
+    public ApiError(String status, String message) {
         this(status);
         this.message = message;
     }
 
-    public ApiError(HttpStatus status, String message, Throwable debugMessage) {
+    public ApiError(String status, String message, Throwable debugMessage) {
         this(status, message);
         this.debugMessage = debugMessage.getLocalizedMessage();
     }

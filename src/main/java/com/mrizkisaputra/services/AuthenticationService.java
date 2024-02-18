@@ -1,8 +1,11 @@
 package com.mrizkisaputra.services;
 
-import com.mrizkisaputra.model.dto.RegisterUserDTO;
+import com.mrizkisaputra.model.dto.LoginUserRequestDTO;
+import com.mrizkisaputra.model.dto.LoginUserResponseDTO;
+import com.mrizkisaputra.model.dto.RegisterUserRequestDTO;
 import com.mrizkisaputra.model.entity.Role;
 import com.mrizkisaputra.model.entity.User;
+import com.mrizkisaputra.model.response.ApiError;
 import com.mrizkisaputra.model.response.ApiSuccess;
 import com.mrizkisaputra.repositories.RoleRepository;
 import com.mrizkisaputra.repositories.UserRepository;
@@ -14,6 +17,11 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,13 +45,20 @@ public class AuthenticationService implements MessageSourceAware {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
+    private AuthenticationManager authenticateManager;
+
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
     private Validator validator;
     private MessageSource messageSource;
 
+
     @Transactional
-    public ResponseEntity<ApiSuccess<User>> registerUser(RegisterUserDTO userDTO) {
+    public ResponseEntity<ApiSuccess<User>> registerUser(RegisterUserRequestDTO userDTO) {
         // validasi request http body
-        Set<ConstraintViolation<RegisterUserDTO>> validated = validator.validate(userDTO);
+        Set<ConstraintViolation<RegisterUserRequestDTO>> validated = validator.validate(userDTO);
         if (!validated.isEmpty()) {
             throw new ConstraintViolationException(messageSource.getMessage("validation-failed", null, Locale.getDefault()), validated);
         }
@@ -59,11 +74,29 @@ public class AuthenticationService implements MessageSourceAware {
         User user = new User(userDTO.getUsername(), encodedPassword, Set.of(role));
         userRepository.save(user);
         ApiSuccess<User> apiSuccess = new ApiSuccess<>(HttpStatus.CREATED, messageSource.getMessage("register-success", null, Locale.getDefault()), List.of(user), null);
-        return buildResponseEntity(apiSuccess);
+        return buildResponseEntity(apiSuccess, HttpStatus.CREATED);
     }
 
-    private ResponseEntity<ApiSuccess<User>> buildResponseEntity(ApiSuccess<User> apiSuccess) {
-        return new ResponseEntity<>(apiSuccess, HttpStatus.CREATED);
+    public ResponseEntity<ApiSuccess<LoginUserResponseDTO>> loginUser(LoginUserRequestDTO user) {
+        Set<ConstraintViolation<LoginUserRequestDTO>> validated = validator.validate(user);
+        if (!validated.isEmpty()) {
+            throw new ConstraintViolationException("Validation failed", validated);
+        }
+
+        try {
+            Authentication authenticate = authenticateManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
+            );
+            String token = tokenService.generateJwt(authenticate);
+            LoginUserResponseDTO responseDTO = new LoginUserResponseDTO(userRepository.findByUsername(user.getUsername()).get(), token);
+            return buildResponseEntity(new ApiSuccess<>(HttpStatus.OK, "Login berhasil", List.of(responseDTO), null), HttpStatus.OK);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username or password is wrong!");
+        }
+    }
+
+    private <T> ResponseEntity<ApiSuccess<T>> buildResponseEntity(ApiSuccess<T> apiSuccess, HttpStatus status) {
+        return new ResponseEntity<>(apiSuccess, status);
     }
 
     @Override
