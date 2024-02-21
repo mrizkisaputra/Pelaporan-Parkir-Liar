@@ -1,6 +1,7 @@
 package com.mrizkisaputra.model.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,7 +14,7 @@ import java.util.Set;
 @Setter
 @Entity(name = "s_users")
 public class User implements UserDetails {
-    @Id
+    @Id @Getter
     @GeneratedValue(generator = "system-uuid") @GenericGenerator(name = "system-uuid", strategy = "uuid2")
     private String id;
 

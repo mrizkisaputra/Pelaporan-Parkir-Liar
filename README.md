@@ -28,8 +28,6 @@ Ini adalah aplikasi Web API dengan implementasi REST API
     * registrasi user
     * login user
     * get user
-    * logout user
-* User manajemen pelaporan
     * create laporan parkir liar
     * update laporan parkir liar
     * get laporan parkir liar
@@ -41,7 +39,7 @@ Ini adalah aplikasi Web API dengan implementasi REST API
 
 * list laporan parkir liar
 
-## Cara Sebelum Request ke resource API sebagai user pelapor
+## Sebelum Request ke resource API sebagai user pelapor
 
 1. Agar bisa melakukan request ke _resource_ sebagai user pelapor, silahkan registrasi terlebih dahulu. Dengan cara
    seperti ini.
@@ -49,7 +47,7 @@ Ini adalah aplikasi Web API dengan implementasi REST API
    ```http request
      POST http://localhost:port_number/auth/register
    ```
-   request body
+   request body (json)
    ```json
        {
          "username": "user",
@@ -57,7 +55,7 @@ Ini adalah aplikasi Web API dengan implementasi REST API
        }
    ```
 
-   response body
+   response body (json)
    ```json
    {
     "status": "CREATED",
@@ -82,7 +80,7 @@ Ini adalah aplikasi Web API dengan implementasi REST API
     POST localhost:8080/api/v1/auth/login
     ```
 
-    request body
+    request body (json)
     ```json
     {
       "username": "user",
@@ -90,7 +88,7 @@ Ini adalah aplikasi Web API dengan implementasi REST API
     }
     ```
     
-    response body
+    response body (json)
     ```json
     {
       "status": "OK",
@@ -112,10 +110,85 @@ Ini adalah aplikasi Web API dengan implementasi REST API
       }
     }
     ```
+    
+## Api pengaduan parkir liar
 
+1.  Untuk membuat laporan terhadap pelanggaran parkir liar. Dengan cara seperti ini
 
+    ```http request
+    POST localhost:8080/api/v1/users/parking/report
+    ```
 
+    request header
+    ```http request
+    authorization: Bearer token
+    ```
+    request body (form-data)
+    ```text
+    file: photo
+    platNumber: BG7688YAP
+    longitude: -jshY78skSs
+    latitude: -8IjdnIU82Kh
+    description: kendaraan ini membuat macet jalan karena parkir di bahu jalan
+    ```
+    
+    response body (json)
+    ```json
+    {
+        "status": "CREATED",
+        "message": "a report on illegal parking was successfully made"
+    }
+    ```
 
+   2.   Untuk mengambil semua daftar pengaduan yang dibuat. Dengan cara seperti ini
+    
+    ```http request
+    GET localhost:8080/api/v1/users/parking/report
+    ```
+
+    request header
+    ```http request
+    authorization: Bearer token
+    ```
+
+    response body (json)
+    ```json
+    {
+        "status": "OK",
+        "message": "berhasil mengambil semua pengaduan laporan parkir liar",
+        "data": [
+            {
+                "id": "6f057522-f6db-4992-b14f-8f36c4678ec5",
+                "photoUrl": "https://firebasestorage.googleapis.com/v0/b/parking-report.appspot.com/o/3f7d7baa-3020-4159-a7c6-2a9c10efe3af.jpeg?alt=media",
+                "platNumber": "BG7696YAP",
+                "longitude": "-8982h3rr9hsj",
+                "latitude": "-jduk8202fn",
+                "description": "mobil ini parkir di bahu jalan"
+            },
+            {
+                "id": "361c1270-4f60-41af-a869-fae4a50fa1d2",
+                "photoUrl": "https://firebasestorage.googleapis.com/v0/b/parking-report.appspot.com/o/02a34d6f-4cc1-4f18-ba89-e5d087753748.jpeg?alt=media",
+                "platNumber": "BG7688YAP",
+                "longitude": "-8982h3rr9hsj",
+                "latitude": "-jduk8202fn",
+                "description": "mobil ini parkir di bahu jalan"
+            },
+            {
+                "id": "3d28cd7d-a675-4c64-a653-93b4e11a0206",
+                "photoUrl": "https://firebasestorage.googleapis.com/v0/b/parking-report.appspot.com/o/78dea8cc-123e-4fc3-a2f2-7aa2c5f57528.jpeg?alt=media",
+                "platNumber": "BG123YAP",
+                "longitude": "-8982h3rr9hsj",
+                "latitude": "-jduk8202fn",
+                "description": "mobil ini parkir di bahu jalan"
+            }
+        ],
+        "paging": {
+            "totalElement": 3,
+            "totalPages": 1,
+            "size": 10
+        }
+    }
+    ```
 
 
 
