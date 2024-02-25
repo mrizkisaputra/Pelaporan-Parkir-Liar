@@ -10,4 +10,6 @@ public interface ParkingReportService {
     void save(ParkingReport parkingReport);
 
     Page<ParkingReport> findAllParkingReportByUserId(String id, Pageable pageable);
+
+    ParkingReport findByIdReportParking(String idReportParking, String currentUser);
 }

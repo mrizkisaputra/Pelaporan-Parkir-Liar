@@ -33,8 +33,13 @@ public class ApiUserPelaporController {
     }
 
     @GetMapping(path = "/parking/report")
-    public ResponseEntity<ApiSuccess<ParkingReportResponseDTO>> getReportParking(Authentication currentUser) {
+    public ResponseEntity<ApiSuccess<ParkingReportResponseDTO>> getAllReportParking(Authentication currentUser) {
         return userPelaporService.getAllParkingReport(currentUser.getName());
+    }
+
+    @GetMapping(path = "/parking/report/{id}")
+    public ResponseEntity<ApiSuccess<ParkingReportResponseDTO>> getReportParking(@PathVariable(name = "id") String id, Authentication currentUser) {
+        return userPelaporService.getParkingReport(id, currentUser.getName());
     }
 
 }

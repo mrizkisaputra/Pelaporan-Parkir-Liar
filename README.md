@@ -190,15 +190,31 @@ Ini adalah aplikasi Web API dengan implementasi REST API
         }
         ```
 
-
-
-
-
-
-
-
-
-
+    3.  Untuk mengambil salah satu pengaduan laporan parkir liar milik si user yang sedang login saat ini. Dengan cara seperti ini
+    
+    ```http request
+    GET localhost:8080/api/v1/users/parking/report/{idReportParking}
+    ```
+    
+    request header
+    ```http request
+    authorization: Bearer token
+    ```
+    
+    response body (json)
+    ```json
+    {
+        "status": "OK",
+        "message": "berhasil mengambil laporan parkir liar dengan id 1f633a1b-3277-402a-963d-67b9758db6e9",
+        "data": {
+        "id": "1f633a1b-3277-402a-963d-67b9758db6e9",
+        "photoUrl": "https://firebasestorage.googleapis.com/v0/b/parking-report.appspot.com/o/697e65c2-cef9-4bfb-9b16-3cfd1475f419.jpeg?alt=media",
+        "platNumber": "BG123YAP",
+        "longitude": "-8982h3rr9hsj",
+        "latitude": "-jduk8202fn",
+        "description": "mobil ini parkir di bahu jalan"
+    }
+    ```
 
 
 

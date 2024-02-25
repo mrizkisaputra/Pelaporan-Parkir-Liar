@@ -92,6 +92,24 @@ public class UserPelaporServiceImpl implements UserPelaporService, MessageSource
         return buildResponseEntity(apiSuccess, HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<ApiSuccess<ParkingReportResponseDTO>> getParkingReport(String idReportParking, String currentUser) {
+        ParkingReport e = parkingReportService.findByIdReportParking(idReportParking, currentUser);
+        ParkingReportResponseDTO data = ParkingReportResponseDTO.builder()
+                .id(e.getId())
+                .photoUrl(e.getPhotoUrl())
+                .platNumber(e.getPlatNumber())
+                .longitude(e.getLongitude())
+                .latitude(e.getLatitude())
+                .description(e.getDescription())
+                .build();
+        ApiSuccess<ParkingReportResponseDTO> apiSuccess = new ApiSuccess<>(
+                HttpStatus.OK,
+                "berhasil mengambil laporan parkir liar dengan id "+idReportParking,
+                List.of(data), null);
+        return buildResponseEntity(apiSuccess, HttpStatus.OK);
+    }
+
 
     private <T> ResponseEntity<ApiSuccess<T>> buildResponseEntity(ApiSuccess<T> apiSuccess, HttpStatus status) {
         return new ResponseEntity<>(apiSuccess, status);

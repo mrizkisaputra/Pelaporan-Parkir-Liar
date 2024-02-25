@@ -10,4 +10,6 @@ public interface UserPelaporService {
     ResponseEntity<ApiSuccess<Object>> createReportParking(String photoUrl, ParkingReportRequestDTO requestDTO, String currentUser);
 
     ResponseEntity<ApiSuccess<ParkingReportResponseDTO>> getAllParkingReport(String currentUser);
+
+    ResponseEntity<ApiSuccess<ParkingReportResponseDTO>> getParkingReport(String idReportParking, String currentUser);
 }
