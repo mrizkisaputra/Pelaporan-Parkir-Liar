@@ -12,4 +12,6 @@ public interface ParkingReportService {
     Page<ParkingReport> findAllParkingReportByUserId(String id, Pageable pageable);
 
     ParkingReport findByIdReportParking(String idReportParking, String currentUser);
+
+    void deleteReportParking(String idReportParking, String currentUser);
 }

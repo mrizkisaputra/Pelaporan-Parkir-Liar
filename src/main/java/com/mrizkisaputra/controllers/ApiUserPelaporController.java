@@ -42,4 +42,9 @@ public class ApiUserPelaporController {
         return userPelaporService.getParkingReport(id, currentUser.getName());
     }
 
+    @DeleteMapping(path = "/parking/report/{id}")
+    public ResponseEntity<ApiSuccess<Object>> deleteReportParking(@PathVariable(name = "id") String idReportParking, Authentication currentUser) {
+        return userPelaporService.deleteReportParking(idReportParking, currentUser.getName());
+    }
+
 }

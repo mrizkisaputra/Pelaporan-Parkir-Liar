@@ -12,4 +12,6 @@ public interface UserPelaporService {
     ResponseEntity<ApiSuccess<ParkingReportResponseDTO>> getAllParkingReport(String currentUser);
 
     ResponseEntity<ApiSuccess<ParkingReportResponseDTO>> getParkingReport(String idReportParking, String currentUser);
+
+    ResponseEntity<ApiSuccess<Object>> deleteReportParking(String idReportParking, String currentUser);
 }

@@ -110,6 +110,12 @@ public class UserPelaporServiceImpl implements UserPelaporService, MessageSource
         return buildResponseEntity(apiSuccess, HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<ApiSuccess<Object>> deleteReportParking(String idReportParking, String currentUser) {
+        parkingReportService.deleteReportParking(idReportParking, currentUser);
+        return buildResponseEntity(new ApiSuccess<>(HttpStatus.OK, "berhasil menghapus pengaduan laporan parkir", null, null), HttpStatus.OK);
+    }
+
 
     private <T> ResponseEntity<ApiSuccess<T>> buildResponseEntity(ApiSuccess<T> apiSuccess, HttpStatus status) {
         return new ResponseEntity<>(apiSuccess, status);
